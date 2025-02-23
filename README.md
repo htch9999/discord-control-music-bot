@@ -3,7 +3,7 @@
 ## English
 Play music on your computer and control it with a Discord bot!
 
-This Python program allows you to play music on your computer and control it via a Discord bot, perfect for those who don't want to keep running back to their computer just to change the song! :))
+This Python program allows you to play music on your computer and control it via a Discord bot, perfect for those who don't want to keep running back to their computer just to change the song!
 
 ### Setup Instructions:
 1. Install Python and required modules:
