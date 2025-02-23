@@ -190,24 +190,29 @@ class QueueControlView(discord.ui.View):
         super().__init__(timeout=None)
         self.ctx = ctx
 
-        # Tạo nút Stop
-        self.stop_button = discord.ui.Button(label="🛑", style=discord.ButtonStyle.secondary)
-        self.stop_button.callback = self.stop_callback  # Gán sự kiện callback
-        self.add_item(self.stop_button)  # Thêm nút vào View
+        # Tạo nút Stop (🛑)
+        stop_button = discord.ui.Button(label="🛑", style=discord.ButtonStyle.secondary)
+        stop_button.callback = self.stop_callback
+        self.add_item(stop_button)  # Thêm nút vào View
 
-        # Tạo nút Skip
-        self.skip_button = discord.ui.Button(label="⏭️", style=discord.ButtonStyle.secondary)
-        self.skip_button.callback = self.skip_callback  # Gán sự kiện callback
-        self.add_item(self.skip_button)  # Thêm nút vào View
+        # Tạo nút Skip (⏭️)
+        skip_button = discord.ui.Button(label="⏭️", style=discord.ButtonStyle.secondary)
+        skip_button.callback = self.skip_callback
+        self.add_item(skip_button)  # Thêm nút vào View
 
     async def stop_callback(self, interaction: discord.Interaction):
         """
         Xử lý khi người dùng nhấn nút 🛑 (Stop).
         """
-        await interaction.response.defer()  # Tránh lỗi timeout
-        await self.ctx.invoke(bot.get_command("st"))  # Gọi lệnh stop
+        await interaction.response.defer()
 
-        # Cập nhật tin nhắn embed của hàng chờ
+        global is_playing, queue, current_song
+        is_playing = False
+        queue.clear()
+        current_song = None
+
+        subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
         queue_message_id = load_queue_message_id()
         if queue_message_id:
             try:
@@ -222,8 +227,23 @@ class QueueControlView(discord.ui.View):
         """
         Xử lý khi người dùng nhấn nút ⏭️ (Skip).
         """
-        await interaction.response.defer()  # Tránh lỗi timeout
-        await self.ctx.invoke(bot.get_command("sk"))  # Gọi lệnh skip
+        await interaction.response.defer()
+
+        global is_playing, queue, current_song
+
+        if is_playing and queue:
+            subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+            if len(queue) > 1:  # Còn bài tiếp theo
+                queue.pop(0)  # Xóa bài hiện tại khỏi hàng chờ
+                current_song = queue[0]  # Chuyển sang bài tiếp theo
+                await play_next(self.ctx)  # Phát tiếp
+            else:
+                current_song = None
+                is_playing = False  # Không còn gì để phát
+                await update_queue_message(self.ctx)  # Cập nhật hàng chờ trống
+        else:
+            await interaction.followup.send("🎵 Không có bài hát nào đang phát để bỏ qua.", ephemeral=True)
 
 async def update_queue_message(ctx):
     global queue_message_id, queue, current_song
@@ -392,7 +412,6 @@ async def play(ctx, *, query: str):
     if not is_playing:
         await play_next(ctx)
 
-
 @bot.command(name="skip")
 async def skip(ctx):
     """
@@ -445,32 +464,5 @@ async def stop(ctx):
     stop_message = await ctx.send("🎵 Phát nhạc đã được dừng và hàng chờ đã được xóa.")
     await asyncio.sleep(5)
     await stop_message.delete()
-
-@bot.command(name="sk")
-async def skip(ctx):
-    """
-    Bỏ qua bài hát hiện tại và phát bài tiếp theo trong hàng chờ.
-    """
-    global is_playing, queue
-
-    if is_playing:
-        is_playing = False
-        subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # Dừng ffplay
-        await finish_song(ctx)  # Kết thúc bài hát hiện tại và chuyển bài tiếp theo
-
-
-@bot.command(name="st")
-async def stop(ctx):
-    """
-    Dừng phát nhạc và xóa hàng chờ.
-    """
-    global is_playing, queue, current_song
-    is_playing = False
-    queue.clear()
-    current_song = None
-
-    # Gửi lệnh dừng tới ffplay
-    subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
 
 bot.run(bot_token)
