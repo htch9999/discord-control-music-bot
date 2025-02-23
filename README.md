@@ -86,7 +86,7 @@ Chương trình Python giúp mở nhạc trên máy tính và điều khiển qu
    - Vào một kênh Discord (nên tạo kênh riêng), dùng `!play <tên bài hát hoặc link>`
 
 ### Lệnh Bot:
-- `!play {tên hoặc link}` - Phát nhạc, hỗ trợ tìm kiếm, link, playlist.
+- `!play {tên hoặc link}` - Phát nhạc, hỗ trợ tìm kiếm, link, playlist youtube.
 - `!stop` - Dừng nhạc và xoá hàng chờ.
 - `!skip` - Bỏ qua bài hát hiện tại.
 
