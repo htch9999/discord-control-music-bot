@@ -190,18 +190,24 @@ class QueueControlView(discord.ui.View):
         super().__init__(timeout=None)
         self.ctx = ctx
 
-    @discord.ui.button(label="🛑", style=discord.ButtonStyle.secondary)
-    async def stop_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        global is_playing, queue, current_song
+        # Tạo nút Stop
+        self.stop_button = discord.ui.Button(label="🛑", style=discord.ButtonStyle.secondary)
+        self.stop_button.callback = self.stop_callback  # Gán sự kiện callback
+        self.add_item(self.stop_button)  # Thêm nút vào View
 
-        await interaction.response.defer()
+        # Tạo nút Skip
+        self.skip_button = discord.ui.Button(label="⏭️", style=discord.ButtonStyle.secondary)
+        self.skip_button.callback = self.skip_callback  # Gán sự kiện callback
+        self.add_item(self.skip_button)  # Thêm nút vào View
 
-        is_playing = False
-        queue.clear()
-        current_song = None
+    async def stop_callback(self, interaction: discord.Interaction):
+        """
+        Xử lý khi người dùng nhấn nút 🛑 (Stop).
+        """
+        await interaction.response.defer()  # Tránh lỗi timeout
+        await self.ctx.invoke(bot.get_command("st"))  # Gọi lệnh stop
 
-        subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
+        # Cập nhật tin nhắn embed của hàng chờ
         queue_message_id = load_queue_message_id()
         if queue_message_id:
             try:
@@ -212,25 +218,12 @@ class QueueControlView(discord.ui.View):
             except discord.NotFound:
                 pass
 
-    @discord.ui.button(label="⏭️", style=discord.ButtonStyle.secondary)
-    async def skip_button(self, interaction: discord.Interaction, button: discord.ui.Button):
-        global is_playing, queue, current_song
-
-        await interaction.response.defer()  # Tránh lỗi interaction timeout
-
-        if is_playing and queue:
-            subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-
-            if len(queue) > 1:  # Còn bài tiếp theo
-                queue.pop(0)  # Xóa bài hiện tại khỏi hàng chờ
-                current_song = queue[0]  # Chuyển sang bài tiếp theo
-                await play_next(self.ctx)  # Phát tiếp
-            else:
-                current_song = None
-                is_playing = False  # Không còn gì để phát
-                await update_queue_message(self.ctx)  # Cập nhật hàng chờ trống
-        else:
-            await interaction.followup.send("🎵 Không có bài hát nào đang phát để bỏ qua.", ephemeral=True)
+    async def skip_callback(self, interaction: discord.Interaction):
+        """
+        Xử lý khi người dùng nhấn nút ⏭️ (Skip).
+        """
+        await interaction.response.defer()  # Tránh lỗi timeout
+        await self.ctx.invoke(bot.get_command("sk"))  # Gọi lệnh skip
 
 async def update_queue_message(ctx):
     global queue_message_id, queue, current_song
@@ -452,5 +445,32 @@ async def stop(ctx):
     stop_message = await ctx.send("🎵 Phát nhạc đã được dừng và hàng chờ đã được xóa.")
     await asyncio.sleep(5)
     await stop_message.delete()
+
+@bot.command(name="sk")
+async def skip(ctx):
+    """
+    Bỏ qua bài hát hiện tại và phát bài tiếp theo trong hàng chờ.
+    """
+    global is_playing, queue
+
+    if is_playing:
+        is_playing = False
+        subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)  # Dừng ffplay
+        await finish_song(ctx)  # Kết thúc bài hát hiện tại và chuyển bài tiếp theo
+
+
+@bot.command(name="st")
+async def stop(ctx):
+    """
+    Dừng phát nhạc và xóa hàng chờ.
+    """
+    global is_playing, queue, current_song
+    is_playing = False
+    queue.clear()
+    current_song = None
+
+    # Gửi lệnh dừng tới ffplay
+    subprocess.run(["taskkill", "/IM", "ffplay.exe", "/F"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
 bot.run(bot_token)
