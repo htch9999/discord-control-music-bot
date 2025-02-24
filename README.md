@@ -32,7 +32,7 @@ This Python program allows you to play music on your computer and control it via
 5. Running the bot:
    - Open `run.bat` in the bot folder for quick startup, or manually run:
      ```sh
-     cd /path/to/bot
+     cd /path-to-bot
      python main.py
      ```
    - In any Discord channel (preferably a dedicated one), use `!play <song name or link>`. The bot will store the message ID containing the queue and update it accordingly. If you want to move the message to another channel, delete the old message and use `!play` in the new channel.
@@ -78,9 +78,9 @@ Chương trình Python giúp mở nhạc trên máy tính và điều khiển qu
        - Manage Messages
      - Copy URL, dán vào trình duyệt để mời bot vào server.
 5. Chạy bot:
-   - Mở `run.bat` trong folder bot hoặc chạy thủ công:
+   - Mở `run.bat` trong folder bot hoặc chạy thủ công nếu bạn thích màu mè mất thời gian:)
      ```sh
-     cd /duong/dan/toi/bot
+     cd /duong-dan-toi-bot
      python main.py
      ```
    - Vào một kênh Discord (nên tạo kênh riêng), dùng `!play <tên bài hát hoặc link>`
