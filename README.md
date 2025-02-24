@@ -15,7 +15,7 @@ This Python program allows you to play music on your computer and control it via
 2. Install FFmpeg:
    - Download FFmpeg from the official website: https://ffmpeg.org/download.html
    - Extract and add the `bin` folder to the system PATH variable
-3. Download the bot files from my GitHub repository: https://github.com/htch9999/discord-control-music-bot
+3. Download the bot files from my GitHub repository an unzip it: https://github.com/htch9999/discord-control-music-bot
 4. Create a Discord bot:
    - Go to the Discord Developer Portal: https://discord.com/developers/
    - Click "New Application," name your bot, and click "Create."
@@ -63,7 +63,7 @@ Chương trình Python giúp mở nhạc trên máy tính và điều khiển qu
 2. Cài đặt FFmpeg:
    - Tải FFmpeg từ trang chính thức: https://ffmpeg.org/download.html
    - Giải nén và thêm thư mục `bin` vào biến môi trường PATH
-3. Tải file bot từ GitHub: https://github.com/htch9999/discord-control-music-bot
+3. Tải file bot từ GitHub và unzip: https://github.com/htch9999/discord-control-music-bot
 4. Tạo bot Discord:
    - Truy cập Discord Developer Portal: https://discord.com/developers/
    - Nhấn "New Application," đặt tên bot và nhấn "Create."
