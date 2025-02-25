@@ -51,7 +51,7 @@ Bot created by **htch9999**. For any questions or contributions, contact me:
 ## Tiếng Việt
 Chơi nhạc trên máy tính và điều khiển bằng bot Discord!
 
-Chương trình Python giúp mở nhạc trên máy tính và điều khiển qua bot Discord, lý tưởng cho những ai lười và không muốn phải chạy qua lại để chuyển bài nhạc! :))
+Chương trình Python giúp mở nhạc trên máy tính và điều khiển qua bot Discord, lý tưởng cho những ai lười và không muốn phải chạy qua lại để chuyển bài nhạc :))
 
 ### Hướng dẫn cài đặt:
 1. Cài đặt Python và các module cần thiết:
@@ -63,7 +63,7 @@ Chương trình Python giúp mở nhạc trên máy tính và điều khiển qu
 2. Cài đặt FFmpeg:
    - Tải FFmpeg từ trang chính thức: https://ffmpeg.org/download.html
    - Giải nén và thêm thư mục `bin` vào biến môi trường PATH
-3. Tải file bot từ GitHub và unzip: https://github.com/htch9999/discord-control-music-bot
+3. Tải file bot từ GitHub và giải nén: https://github.com/htch9999/discord-control-music-bot
 4. Tạo bot Discord:
    - Truy cập Discord Developer Portal: https://discord.com/developers/
    - Nhấn "New Application," đặt tên bot và nhấn "Create."
