@@ -1,78 +1,64 @@
-# Hướng Dẫn Chạy Bot Trong Nền (BACKGROUND RUNNING)
+# Hướng Dẫn Chạy Bot Trong Nền / Background Running Guide
 
-## Giới Thiệu
-Từ phiên bản **1.2**, bot đã hỗ trợ chạy trong nền mà không hiển thị cửa sổ console.
+## Tiếng Việt
+### Phiên bản 1.2 - Chạy bot trong nền
+Giờ đây bot đã có thể chạy trong nền mà không hiện cửa sổ console với phiên bản 1.2. [Tải tại đây](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
 
-🔗 **Tải phiên bản 1.2 tại đây:** [link tải](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
+### 1. Cài đặt
+- Mở cửa sổ CMD (Command Prompt) và cài đặt PyInstaller bằng lệnh:
+  ```sh
+  pip install pyinstaller
+  ```
+- Lưu token của bạn vào file `token.json`.
+- Chạy trực tiếp file `BACKGROUND.exe`. Bây giờ bot đã chạy trong nền, bạn có thể trải nghiệm.
 
+### 2. Chỉnh sửa và tạo lại file chạy nền
+- Nếu muốn chỉnh sửa bot, mở file `main.py` và thực hiện các thay đổi.
+- Mở CMD (hoặc terminal), điều hướng đến thư mục chứa `main.py`:
+  ```sh
+  cd đường/dẫn/đến/thư_mục_của_bạn
+  ```
+- Sử dụng lệnh sau để tạo file chạy nền mới:
+  ```sh
+  python -m PyInstaller --noconsole --onefile main.py
+  ```
+- Sau khi hoàn thành, vào thư mục `dist`, lấy file `main.exe` và di chuyển nó vào thư mục chính của bot.
+- Chạy `main.exe` để bot hoạt động trong nền.
 
-## Cách 1: Chạy Bot Trực Tiếp
-1. Lưu token của bạn vào file `token.json`.
-2. Chạy file `BACKGROUND.exe`.
-3. Bây giờ bot đã chạy trong nền, bạn có thể trải nghiệm.
-
-
-## Cách 2: Tuỳ Chỉnh Và Chạy Bot Trong Nền
-Nếu bạn muốn chỉnh sửa code bot trước khi chạy, hãy làm theo các bước sau:
-
-1. Chỉnh sửa file `main.py` theo ý muốn.
-2. Mở **Command Prompt (cmd) hoặc Terminal**.
-3. Điều hướng đến thư mục chứa file `main.py` bằng lệnh:
-   ```sh
-   cd đường-dẫn-đến-thư-mục-bot
-   ```
-4. Chạy lệnh sau để tạo tệp chạy dưới nền:
-   ```sh
-   python -m PyInstaller --noconsole --onefile .\main.py
-   ```
-5. Sau khi hoàn tất, truy cập thư mục `dist/main.exe`, di chuyển nó vào thư mục chính của bot.
-6. Chạy `main.exe`, bot sẽ chạy dưới nền.
-
-
-## Hỗ Trợ
-Nếu bạn gặp bất kỳ vấn đề hoặc thắc mắc nào, hãy liên hệ tôi để được trợ giúp:
-- **Facebook:** [facebook.com/htch.9999](https://facebook.com/htch.9999)
-- **Discord:** `htch9999`
-
-Bot được tạo bởi **htch9999**.
+Nếu có bất kỳ vấn đề hoặc thắc mắc gì, có thể liên hệ tôi để được trợ giúp:
+- **Facebook**: [facebook.com/htch.9999](https://facebook.com/htch.9999)
+- **Discord**: htch9999
 
 ---
 
-# BACKGROUND RUNNING GUIDE
+## English
+### Version 1.2 - Run bot in background
+The bot can now run in the background without showing the console window in version 1.2. [Download here](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
 
-## Introduction
-Starting from **version 1.2**, the bot now supports running in the background without showing the console window.
+### 1. Installation
+- Open CMD (Command Prompt) and install PyInstaller:
+  ```sh
+  pip install pyinstaller
+  ```
+- Save your token in the `token.json` file.
+- Run `BACKGROUND.exe` directly. The bot will now run in the background.
 
-🔗 **Download version 1.2 here:** [download link](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
+### 2. Modify and rebuild the background executable
+- If you want to modify the bot, edit the `main.py` file.
+- Open CMD (or terminal), navigate to the folder containing `main.py`:
+  ```sh
+  cd path/to/your/folder
+  ```
+- Run the following command to create a new background executable:
+  ```sh
+  python -m PyInstaller --noconsole --onefile main.py
+  ```
+- Once completed, go to the `dist` folder, take the `main.exe` file, and move it to the main bot directory.
+- Run `main.exe` to have the bot work in the background.
 
-
-## Method 1: Run the Bot Directly
-1. Save your token in `token.json`.
-2. Run `BACKGROUND.exe`.
-3. The bot is now running in the background, enjoy!
-
-
-## Method 2: Customize and Run the Bot in the Background
-If you want to modify the bot before running, follow these steps:
-
-1. Edit the `main.py` file as needed.
-2. Open **Command Prompt (cmd) or Terminal**.
-3. Navigate to the bot folder using:
-   ```sh
-   cd path-to-bot-folder
-   ```
-4. Run the following command to create a background executable:
-   ```sh
-   python -m PyInstaller --noconsole --onefile .\main.py
-   ```
-5. Once completed, go to `dist/main.exe`, move it to the main bot folder.
-6. Run `main.exe`, and the bot will run in the background.
-
-
-## Support
-If you encounter any issues or have questions, feel free to contact me for assistance:
-- **Facebook:** [facebook.com/htch.9999](https://facebook.com/htch.9999)
-- **Discord:** `htch9999`
+If you have any issues or questions, feel free to contact me for support:
+- **Facebook**: [facebook.com/htch.9999](https://facebook.com/htch.9999)
+- **Discord**: htch9999
 
 Bot created by **htch9999**.
 
