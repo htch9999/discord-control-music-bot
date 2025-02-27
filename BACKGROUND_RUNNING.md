@@ -46,7 +46,7 @@ Bot được tạo bởi **htch9999**.
 ## Introduction
 Starting from **version 1.2**, the bot now supports running in the background without showing the console window.
 
-🔗 **Download version 1.2 here:** [download link]
+🔗 **Download version 1.2 here:** [download link](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
 
 ---
 
