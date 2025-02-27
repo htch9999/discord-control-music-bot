@@ -3,7 +3,7 @@
 ## Giới Thiệu
 Từ phiên bản **1.2**, bot đã hỗ trợ chạy trong nền mà không hiển thị cửa sổ console.
 
-🔗 **Tải phiên bản 1.2 tại đây:** [link tải]()
+🔗 **Tải phiên bản 1.2 tại đây:** [link tải](https://github.com/htch9999/discord-control-music-bot/releases/tag/v1.2)
 
 ---
 
