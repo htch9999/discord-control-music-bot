@@ -46,6 +46,12 @@ Bot created by **htch9999**. For any questions or contributions, contact me:
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
 
+## ☕️ Support me:
+If you find my work helpful and would like to support me, you can buy me a coffee or send a small donation via MoMo. Your support means a lot and helps me continue creating and sharing!  
+- **Buy Me a Coffee**: https://buymeacoffee.com/htch9999
+- **MoMo Donation**: https://me.momo.vn/htch9999
+
+
 ---
 
 ## Tiếng Việt
@@ -94,3 +100,7 @@ Bot tạo bởi **htch9999**. Liên hệ:
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
 
+## ☕️ Giúp đỡ mình tại:
+Nếu bạn thấy những gì mình làm hữu ích và muốn ủng hộ, bạn có thể mua cho mình một ly cà phê hoặc gửi một khoản đóng góp nhỏ qua MoMo. Sự hỗ trợ của bạn là động lực để mình tiếp tục sáng tạo và chia sẻ!  
+- **Ủng hộ qua Momo**: https://me.momo.vn/htch9999
+- **Buy me a coffee**: https://buymeacoffee.com/htch9999
