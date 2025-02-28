@@ -42,6 +42,10 @@ This Python program allows you to play music on your computer and control it via
 - `!stop` - Stop playback and clear the queue.
 - `!skip` - Skip the current song and play the next one in the queue.
 
+### 🆕 Background Running Mode (Version 1.2)  
+Bot can now run in the background without showing the console window! See the full guide here:  
+[**Background Running Guide**](https://github.com/htch9999/discord-control-music-bot/blob/main/BACKGROUND_RUNNING.md)  
+
 Bot created by **htch9999**. For any questions or contributions, contact me:
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
@@ -95,6 +99,10 @@ Chương trình Python giúp mở nhạc trên máy tính và điều khiển qu
 - `!play {tên hoặc link}` - Phát nhạc, hỗ trợ tìm kiếm, link, playlist youtube.
 - `!stop` - Dừng nhạc và xoá hàng chờ.
 - `!skip` - Bỏ qua bài hát hiện tại.
+
+### 🆕 Chế Độ Chạy Nền (Phiên bản 1.2)  
+Bot đã hỗ trợ chạy nền mà không hiện cửa sổ console! Xem hướng dẫn chi tiết tại:  
+[**Hướng Dẫn Chạy Nền**](https://github.com/htch9999/discord-control-music-bot/blob/main/BACKGROUND_RUNNING.md)  
 
 Bot tạo bởi **htch9999**. Liên hệ:
 - **Facebook**: https://www.facebook.com/htch.9999/
