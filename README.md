@@ -21,8 +21,7 @@ Search, queue, skip, pause, adjust volume, and more—all from your Discord serv
 ### 🚀 Installation
 
 **Download:**  
-- 👉 [Download the latest release (.zip or .exe)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
-  *(Always use the latest release instead of cloning the repo!)*
+- 👉 [Download the latest release (source code included)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
 
 **Or build your own .exe:**  
 - Install Python 3.11.9 and required modules:
@@ -112,7 +111,7 @@ Search, queue, skip, pause, adjust volume, and more—all from your Discord serv
 
 ### 🧑‍💻 Credits & Support
 
-Bot created by **htch9999**  
+Bot created by **htch9999**. If there is any problem, please contact us via:
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
 
@@ -147,8 +146,7 @@ Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... 
 ### 🚀 Hướng dẫn cài đặt
 
 **Tải về:**  
-- 👉 [Tải bản phát hành mới nhất (.zip hoặc .exe)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
-  *(Luôn tải bản phát hành mới nhất, không nên clone repo!)*
+- 👉 [Tải bản phát hành mới nhất (đã có kèm cả mã nguồn)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
 
 **Hoặc tự build file .exe:**  
 - Cài Python 3.11.9 và các thư viện:
@@ -238,7 +236,7 @@ Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... 
 
 ### 🧑‍💻 Liên hệ & Ủng hộ
 
-Bot tạo bởi **htch9999**  
+Bot tạo bởi **htch9999**. Nếu có bất kì vấn đề gì, có thể liên hệ qua:
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
 
