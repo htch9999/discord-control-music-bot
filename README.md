@@ -2,38 +2,23 @@
 
 ---
 
-<div style="display: flex; gap: 2em;">
-  <div style="flex: 1;">
-    <h2>🇬🇧 English</h2>
-    <b>Play and control music on your Windows PC via Discord!</b><br>
-    Search, queue, skip, pause, adjust volume, and more—all from your Discord server.<br>
-    <ul>
-      <li>Play by name, link, or playlist (YouTube)</li>
-      <li>Queue management: add, remove, skip, replay, clear</li>
-      <li>Pause/Resume, Stop, Volume control</li>
-      <li>Persistent queue/message, tray icon, background mode</li>
-      <li>Active channel restriction, interactive Discord UI</li>
-      <li>Auto message cleanup, multi-language</li>
-    </ul>
-  </div>
-  <div style="flex: 1;">
-    <h2>🇻🇳 Tiếng Việt</h2>
-    <b>Phát và điều khiển nhạc trên máy tính Windows qua Discord!</b><br>
-    Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... tất cả từ Discord.<br>
-    <ul>
-      <li>Phát nhạc theo tên, link, playlist (YouTube)</li>
-      <li>Quản lý hàng chờ: thêm, xoá, bỏ qua, phát lại, xoá hàng chờ</li>
-      <li>Tạm dừng/tiếp tục, dừng, chỉnh âm lượng</li>
-      <li>Lưu trạng thái, chạy nền với icon khay hệ thống</li>
-      <li>Chỉ hoạt động ở kênh mặc định, giao diện nút trực quan</li>
-      <li>Tự động xoá tin nhắn, đa ngôn ngữ</li>
-    </ul>
-  </div>
-</div>
+## 🇬🇧 English
+
+**Play and control music on your Windows PC via Discord!**  
+Search, queue, skip, pause, adjust volume, and more—all from your Discord server.
+
+### Features
+
+- Play by name, link, or playlist (YouTube)
+- Queue management: add, remove, skip, replay, clear
+- Pause/Resume, Stop, Volume control
+- Persistent queue/message, tray icon, background mode
+- Active channel restriction, interactive Discord UI
+- Auto message cleanup, multi-language
 
 ---
 
-## 🚀 Installation / Cài đặt
+### 🚀 Installation
 
 **Download:**  
 - 👉 [Download the latest release (.zip or .exe)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
@@ -50,9 +35,7 @@
   ```
 - Use the generated `main.exe` file to run the bot (no console window, tray icon enabled).
 
-**Hoặc chạy trực tiếp bằng Python:**  
-- Tải Python 3.11.9 và các thư viện như trên.
-- Chạy:
+**Or run with Python:**  
   ```sh
   python main.py
   ```
@@ -73,79 +56,42 @@
 
 ---
 
-## 🕹️ Usage / Sử dụng
+### 🕹️ Usage
 
-<div style="display: flex; gap: 2em;">
-  <div style="flex: 1;">
-    <h3>🇬🇧 English</h3>
-    <ol>
-      <li>In your chosen Discord channel, type:<br>
-        <code>!activate</code><br>
-        <i>(This sets the current channel as the bot's active channel. All commands must be used here.)</i>
-      </li>
-      <li>Now you can use all features and commands below!</li>
-    </ol>
-    <b>Basic Commands:</b>
-    <ul>
-      <li><code>!play &lt;name/link&gt;</code> – Play song or playlist (add to queue)</li>
-      <li><code>!p &lt;name/link&gt;</code> – Alias for <code>!play</code></li>
-      <li><code>!skip</code> – Skip current song</li>
-      <li><code>!stop</code> – Stop and clear queue</li>
-      <li><code>!pause</code> – Pause/Resume</li>
-      <li><code>!h</code> – Show help</li>
-    </ul>
-    <b>Interactive Controls:</b>
-    <ul>
-      <li>➕: Add song</li>
-      <li>⏭️: Skip</li>
-      <li>🛑: Stop</li>
-      <li>⏯️: Pause/Resume</li>
-      <li>🔁: Replay current song</li>
-      <li>🔉 / 🔊: Volume down/up</li>
-      <li>🗑️: Remove song from queue</li>
-    </ul>
-  </div>
-  <div style="flex: 1;">
-    <h3>🇻🇳 Tiếng Việt</h3>
-    <ol>
-      <li>Vào kênh Discord bạn muốn, gõ:<br>
-        <code>!activate</code><br>
-        <i>(Đặt kênh hiện tại làm kênh mặc định. Mọi lệnh phải dùng tại đây.)</i>
-      </li>
-      <li>Bây giờ bạn có thể sử dụng tất cả các tính năng và lệnh bên dưới!</li>
-    </ol>
-    <b>Lệnh cơ bản:</b>
-    <ul>
-      <li><code>!play &lt;tên hoặc link&gt;</code> – Phát nhạc/playlist (thêm vào hàng chờ)</li>
-      <li><code>!p &lt;tên hoặc link&gt;</code> – Alias cho <code>!play</code></li>
-      <li><code>!skip</code> – Bỏ qua bài hiện tại</li>
-      <li><code>!stop</code> – Dừng và xoá hàng chờ</li>
-      <li><code>!pause</code> – Tạm dừng/tiếp tục</li>
-      <li><code>!h</code> – Hướng dẫn</li>
-    </ul>
-    <b>Điều khiển bằng nút:</b>
-    <ul>
-      <li>➕: Thêm bài hát</li>
-      <li>⏭️: Bỏ qua</li>
-      <li>🛑: Dừng</li>
-      <li>⏯️: Tạm dừng/tiếp tục</li>
-      <li>🔁: Phát lại bài hiện tại</li>
-      <li>🔉 / 🔊: Giảm/Tăng âm lượng</li>
-      <li>🗑️: Xoá bài khỏi hàng chờ</li>
-    </ul>
-  </div>
-</div>
+1. In your chosen Discord channel, type:
+   ```
+   !activate
+   ```
+   *(This sets the current channel as the bot's active channel. All commands must be used here.)*
+2. Now you can use all features and commands below!
+
+**Basic Commands:**
+- `!play <name/link>` – Play song or playlist (add to queue)
+- `!p <name/link>` – Alias for `!play`
+- `!skip` – Skip current song
+- `!stop` – Stop and clear queue
+- `!pause` – Pause/Resume
+- `!h` – Show help
+
+**Interactive Controls:**
+- ➕: Add song
+- ⏭️: Skip
+- 🛑: Stop
+- ⏯️: Pause/Resume
+- 🔁: Replay current song
+- 🔉 / 🔊: Volume down/up
+- 🗑️: Remove song from queue
 
 ---
 
-## 💾 Persistence & Tray Icon / Lưu trạng thái & chạy nền
+### 💾 Persistence & Tray Icon
 
 - The bot saves the queue and message state to disk. If you close the bot (via tray icon or exit), it will restore the queue/message on next start.
 - Tray icon (bottom right of Windows): right-click to save & exit, or exit immediately.
 
 ---
 
-## 🛠️ Advanced / Nâng cao
+### 🛠️ Advanced
 
 - **Background/Tray Mode**: Bot runs in background, no console window.
 - **Auto-cleanup**: Bot deletes command messages and invalid messages for a clean channel.
@@ -153,30 +99,30 @@
 
 ---
 
-## ❓ FAQ
+### ❓ FAQ
 
-- **Q: Does the bot play music in Discord voice channels?**
-  - **A:** No, it plays music on your PC and lets you control it via Discord.
-- **Q: Can I use Spotify/SoundCloud?**
-  - **A:** Only YouTube (video, playlist, search) is supported.
-- **Q: How to move the queue message to another channel?**
-  - **A:** Delete the old message, use `!activated` in the new channel.
+- **Q: Does the bot play music in Discord voice channels?**  
+  **A:** No, it plays music on your PC and lets you control it via Discord.
+- **Q: Can I use Spotify/SoundCloud?**  
+  **A:** Only YouTube (video, playlist, search) is supported.
+- **Q: How to move the queue message to another channel?**  
+  **A:** Delete the old message, use `!activate` in the new channel.
 
 ---
 
-## 🧑‍💻 Credits & Support / Liên hệ & Ủng hộ
+### 🧑‍💻 Credits & Support
 
 Bot created by **htch9999**  
 - **Facebook**: https://www.facebook.com/htch.9999/
 - **Discord**: htch9999
 
-**Support me / Ủng hộ mình:**  
+**Support me:**  
 - [Buy Me a Coffee](https://buymeacoffee.com/htch9999)  
 - [MoMo Donation](https://me.momo.vn/htch9999)
 
 ---
 
-## 📝 License
+### 📝 License
 
 MIT License. See [LICENSE](LICENSE) for details.
 
@@ -184,48 +130,127 @@ MIT License. See [LICENSE](LICENSE) for details.
 
 ## 🇻🇳 Tiếng Việt
 
-### Mục đích
+**Phát và điều khiển nhạc trên máy tính Windows qua Discord!**  
+Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... tất cả từ Discord.
 
-Bot giúp bạn phát nhạc trên máy tính Windows và điều khiển từ xa qua Discord. Lý tưởng cho phòng làm việc, phòng net, hoặc ai lười đứng dậy chuyển bài nhạc!
+### Tính năng
 
-### Tính năng nổi bật
+- Phát nhạc theo tên, link, playlist (YouTube)
+- Quản lý hàng chờ: thêm, xoá, bỏ qua, phát lại, xoá hàng chờ
+- Tạm dừng/tiếp tục, dừng, chỉnh âm lượng
+- Lưu trạng thái, chạy nền với icon khay hệ thống
+- Chỉ hoạt động ở kênh mặc định, giao diện nút trực quan
+- Tự động xoá tin nhắn, đa ngôn ngữ
 
-- Tìm kiếm, phát nhạc, playlist YouTube
-- Quản lý hàng chờ, bỏ qua, tạm dừng, phát lại, xoá bài
-- Điều chỉnh âm lượng hệ thống
-- Lưu trạng thái hàng chờ, tự động khôi phục khi khởi động lại
-- Chạy nền với icon ở khay hệ thống
-- Chỉ hoạt động ở kênh mặc định nếu muốn
-- Giao diện nút bấm trực quan trên Discord
+---
 
-### Hướng dẫn cài đặt
+### 🚀 Hướng dẫn cài đặt
 
-1. Cài Python 3.11.9 và các thư viện cần thiết:
-   ```sh
-   pip install discord.py yt-dlp py-cord pycaw pystray pillow psutil comtypes
+**Tải về:**  
+- 👉 [Tải bản phát hành mới nhất (.zip hoặc .exe)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
+  *(Luôn tải bản phát hành mới nhất, không nên clone repo!)*
+
+**Hoặc tự build file .exe:**  
+- Cài Python 3.11.9 và các thư viện:
+  ```sh
+  pip install discord.py yt-dlp py-cord pycaw pystray pillow psutil comtypes pyinstaller
+  ```
+- Build bot thành file .exe (khuyên dùng để chạy nền, không hiện cửa sổ):
+  ```sh
+  python -m PyInstaller --onefile --noconsole --icon=icon.png --add-data "icon.png;." main.py
+  ```
+- Sử dụng file `main.exe` để chạy bot (không hiện console, có icon khay hệ thống).
+
+**Hoặc chạy trực tiếp bằng Python:**  
+  ```sh
+  python main.py
+  ```
+
+**Cài FFmpeg:**  
+- Tải tại: https://ffmpeg.org/download.html  
+- Giải nén và thêm thư mục `bin` vào biến môi trường `PATH`.
+
+**Tạo bot Discord & Token:**  
+- Vào [Discord Developer Portal](https://discord.com/developers/)
+- Tạo ứng dụng mới > Bot > Reset Token > Lưu vào `token.json`:
+  ```json
+  { "BOT_TOKEN": "YOUR_BOT_TOKEN_HERE" }
+  ```
+- Bật "Message Content Intent" trong cài đặt Bot.
+- Dùng OAuth2 URL Generator để mời bot vào server với quyền:
+  - Read Messages, Send Messages, Manage Messages
+
+---
+
+### 🕹️ Hướng dẫn sử dụng
+
+1. Vào kênh Discord bạn muốn, gõ:
    ```
-2. Cài FFmpeg, thêm vào PATH.
-3. Tạo bot Discord, lấy token, lưu vào `token.json`.
-4. Chạy bot bằng `python main.py`.
+   !activate
+   ```
+   *(Đặt kênh hiện tại làm kênh mặc định. Mọi lệnh phải dùng tại đây.)*
+2. Bây giờ bạn có thể sử dụng tất cả các tính năng và lệnh bên dưới!
 
-### Lệnh sử dụng
+**Lệnh cơ bản:**
+- `!play <tên hoặc link>` – Phát nhạc/playlist (thêm vào hàng chờ)
+- `!p <tên hoặc link>` – Alias cho `!play`
+- `!skip` – Bỏ qua bài hiện tại
+- `!stop` – Dừng và xoá hàng chờ
+- `!pause` – Tạm dừng/tiếp tục
+- `!h` – Hướng dẫn
 
-- `!play <tên hoặc link>`: Phát nhạc/playlist
-- `!p <tên hoặc link>`: Alias cho play
-- `!skip`: Bỏ qua bài hiện tại
-- `!stop`: Dừng và xoá hàng chờ
-- `!pause`: Tạm dừng/tiếp tục
-- `!activate`: Đặt kênh mặc định
-- `!h`: Hướng dẫn
+**Điều khiển bằng nút:**
+- ➕: Thêm bài hát
+- ⏭️: Bỏ qua
+- 🛑: Dừng
+- ⏯️: Tạm dừng/tiếp tục
+- 🔁: Phát lại bài hiện tại
+- 🔉 / 🔊: Giảm/Tăng âm lượng
+- 🗑️: Xoá bài khỏi hàng chờ
 
-### Hỗ trợ
+---
 
-- Facebook: https://www.facebook.com/htch.9999/
-- Discord: htch9999
+### 💾 Lưu trạng thái & chạy nền
 
-Ủng hộ mình tại:
-- [Momo](https://me.momo.vn/htch9999)
-- [Buy me a coffee](https://buymeacoffee.com/htch9999)
+- Bot sẽ tự động lưu hàng chờ và trạng thái tin nhắn. Khi tắt bot (qua icon khay hệ thống hoặc thoát), hàng chờ sẽ được khôi phục khi mở lại.
+- Icon khay hệ thống (góc phải dưới Windows): click chuột phải để lưu & thoát, hoặc thoát ngay.
+
+---
+
+### 🛠️ Nâng cao
+
+- **Chạy nền/Tray Mode**: Bot chạy nền, không hiện cửa sổ.
+- **Tự động dọn dẹp**: Bot tự xoá lệnh và tin nhắn không hợp lệ để kênh sạch sẽ.
+- **Hỗ trợ nhiều server**: Mỗi server có thể có hàng chờ/tin nhắn riêng.
+
+---
+
+### ❓ Câu hỏi thường gặp
+
+- **Bot có phát nhạc trong voice channel không?**  
+  Không, bot phát nhạc trên máy tính của bạn và điều khiển qua Discord.
+- **Có hỗ trợ Spotify/SoundCloud không?**  
+  Chỉ hỗ trợ YouTube (video, playlist, tìm kiếm).
+- **Muốn chuyển tin nhắn hàng chờ sang kênh khác?**  
+  Xoá tin nhắn cũ, dùng `!activate` ở kênh mới.
+
+---
+
+### 🧑‍💻 Liên hệ & Ủng hộ
+
+Bot tạo bởi **htch9999**  
+- **Facebook**: https://www.facebook.com/htch.9999/
+- **Discord**: htch9999
+
+**Ủng hộ mình:**  
+- [Buy Me a Coffee](https://buymeacoffee.com/htch9999)  
+- [MoMo Donation](https://me.momo.vn/htch9999)
+
+---
+
+### 📝 License
+
+MIT License. Xem [LICENSE](LICENSE) để biết chi tiết.
 
 ---
 
