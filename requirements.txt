@@ -1,0 +1,7 @@
+discord.py
+yt-dlp
+psutil
+pywin32
+pycaw
+pillow
+pystray
