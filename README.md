@@ -94,7 +94,6 @@ Search, queue, skip, pause, adjust volume, and more—all from your Discord serv
 
 - **Background/Tray Mode**: Bot runs in background, no console window.
 - **Auto-cleanup**: Bot deletes command messages and invalid messages for a clean channel.
-- **Multi-server support**: Each server can have its own queue/message.
 
 ---
 
@@ -219,7 +218,6 @@ Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... 
 
 - **Chạy nền/Tray Mode**: Bot chạy nền, không hiện cửa sổ.
 - **Tự động dọn dẹp**: Bot tự xoá lệnh và tin nhắn không hợp lệ để kênh sạch sẽ.
-- **Hỗ trợ nhiều server**: Mỗi server có thể có hàng chờ/tin nhắn riêng.
 
 ---
 
