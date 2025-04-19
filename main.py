@@ -21,6 +21,7 @@ from PIL import Image
 import threading
 import sys
 import ctypes
+import functools
 
 # Đọc token từ file config.json
 with open("token.json", "r") as config_file:
@@ -36,20 +37,34 @@ QUEUE_BACKUP_FILE = "queue_backup.json"
 
 def save_queue_backup():
     """Lưu danh sách phát hiện tại ra file JSON"""
-    with open(QUEUE_BACKUP_FILE, "w", encoding="utf-8") as f:
-        json.dump(queue, f, ensure_ascii=False, indent=2)
+    # Đảm bảo queue là list các dict (tránh lỗi khi dump)
+    try:
+        with open(QUEUE_BACKUP_FILE, "w", encoding="utf-8") as f:
+            json.dump(list(queue), f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"Lỗi khi lưu queue backup: {e}")
 
 def load_queue_backup():
     """Nạp lại danh sách phát từ file JSON (nếu có)"""
     global queue
     if os.path.exists(QUEUE_BACKUP_FILE):
-        with open(QUEUE_BACKUP_FILE, "r", encoding="utf-8") as f:
-            try:
-                queue = json.load(f)
-            except Exception:
-                queue = []
+        try:
+            with open(QUEUE_BACKUP_FILE, "r", encoding="utf-8") as f:
+                loaded = json.load(f)
+                # Đảm bảo dữ liệu là list các dict có 'title' và 'url'
+                if isinstance(loaded, list) and all(isinstance(item, dict) and 'title' in item and 'url' in item for item in loaded):
+                    queue = loaded
+                else:
+                    print("Queue backup không hợp lệ, bỏ qua.")
+                    queue = []
+        except Exception as e:
+            print(f"Lỗi khi nạp queue backup: {e}")
+            queue = []
         # Xoá file sau khi nạp để tránh phát lại nhiều lần
-        os.remove(QUEUE_BACKUP_FILE)
+        try:
+            os.remove(QUEUE_BACKUP_FILE)
+        except Exception:
+            pass
 
 queue = []  # Danh sách hàng chờ
 load_queue_backup()  # Nạp lại queue nếu có
@@ -373,7 +388,6 @@ class AddSongModal(discord.ui.Modal):
             color=discord.Color.blue()
         ))
 
-        # Tìm kiếm video/playlist
         result = await search_youtube_song(query)
 
         if not result:
@@ -387,14 +401,28 @@ class AddSongModal(discord.ui.Modal):
             await status_message.delete()
             return
 
+        global is_playing
+        started_playing = False
+
         if result['type'] == 'playlist':
-            videos = result['videos']
-            queue.extend({"title": video['title'], "url": video['url']} for video in videos)
+            playlist_url = query
+            added_count = 0
+            async for video in search_youtube_playlist_entries(playlist_url):
+                queue.append({"title": video['title'], "url": video['url']})
+                asyncio.get_event_loop().run_in_executor(None, precache_video_infos, [{"title": video['title'], "url": video['url']}])
+                added_count += 1
+                # Phát nhạc ngay khi có bài đầu tiên
+                if not is_playing and not started_playing:
+                    started_playing = True
+                    await update_queue_message(ctx)
+                    await play_next(ctx)
+                # Cập nhật embed mỗi 10 bài
+                if added_count % 10 == 0:
+                    await update_queue_message(ctx)
+            await update_queue_message(ctx)
             success_embed = discord.Embed(
                 title="✅ Đã thêm playlist!",
-                description="\n".join(
-                    f"**[{video['title']}]({video['url']})**" for video in videos[:10]
-                ) + (f"\n...và {len(videos)-10} bài nữa" if len(videos) > 10 else ""),
+                description=f"Đã thêm {added_count} bài từ playlist. Có thể mất một chút thời gian để tải tất cả.",
                 color=discord.Color.green()
             )
         else:
@@ -403,18 +431,19 @@ class AddSongModal(discord.ui.Modal):
                 "title": video['title'],
                 "url": video['url']
             })
+            asyncio.get_event_loop().run_in_executor(None, precache_video_infos, [{"title": video['title'], "url": video['url']}])
             success_embed = discord.Embed(
                 title="✅ Đã thêm vào hàng chờ!",
                 description=f"**[{video['title']}]({video['url']})**",
                 color=discord.Color.green()
             )
+            if not is_playing:
+                await update_queue_message(ctx)
+                await play_next(ctx)
 
         success_embed.set_footer(text=f"Yêu cầu bởi: {interaction.user}")
         await status_message.edit(embed=success_embed)
         await update_queue_message(ctx)
-
-        if not is_playing:
-            await play_next(ctx)
 
         await asyncio.sleep(5)
         await status_message.delete()
@@ -425,7 +454,9 @@ class RemoveSongSelect(discord.ui.Select):
         # Bỏ qua bài đang phát (index 0)
         for i, song in enumerate(queue[1:11], start=1):
             title = song['title'] if isinstance(song, dict) else str(song)
-            options.append(discord.SelectOption(label=f"{i}. {title}", value=str(i)))
+            # Cắt ngắn title để label không vượt quá 100 ký tự
+            short_title = (title[:90] + '...') if len(title) > 93 else title
+            options.append(discord.SelectOption(label=f"{i}. {short_title}", value=str(i)))
         super().__init__(placeholder="🗑️ Xoá bài khỏi hàng chờ...", min_values=1, max_values=1, options=options)
         self.ctx = ctx
 
@@ -616,15 +647,12 @@ async def update_queue_message(ctx):
     global queue_message_id, queue, current_song, is_paused
 
     active_channel_id = load_active_channel_id()
-    # Hỗ trợ cả Context và TextChannel
     channel_id = getattr(ctx, "channel", ctx).id if hasattr(ctx, "channel") else ctx.id
     if active_channel_id and channel_id != active_channel_id:
         return
 
     queue_message_id = load_queue_message_id()
-
     queue_message = None
-    # Lấy channel object đúng kiểu
     channel = ctx.channel if hasattr(ctx, "channel") else ctx
     if queue_message_id:
         try:
@@ -632,7 +660,6 @@ async def update_queue_message(ctx):
         except discord.NotFound:
             queue_message = None
 
-    # Thay đổi tiêu đề nếu đang tạm dừng
     embed_title = "🎵 Hàng chờ phát nhạc"
     if is_paused:
         embed_title += " (Tạm dừng)"
@@ -643,33 +670,76 @@ async def update_queue_message(ctx):
         embed.description = "Hàng chờ trống."
     else:
         try:
-            current_song_info = get_video_info(queue[0]['url'])
+            # Lấy info bài hiện tại (ưu tiên cache, không block)
+            current_song_info = VIDEO_CACHE.get(queue[0]['url'], (None, None))[1]
+            if not current_song_info:
+                loop = asyncio.get_event_loop()
+                current_song_info = await loop.run_in_executor(
+                    None, functools.partial(get_video_info, queue[0]['url'])
+                )
             current_title = current_song_info['title']
             current_url = current_song_info.get('url', queue[0]['url'])
             embed.description = f"**Đang phát: [{current_title}]({current_url})**\n\n"
-            # Thêm thumbnail
             if current_song_info.get("thumbnail"):
                 embed.set_thumbnail(url=current_song_info["thumbnail"])
 
+            # Hiển thị tối đa 10 bài tiếp theo (dùng cache nếu có, fetch async nếu chưa)
             next_songs = queue[1:11]
             if next_songs:
                 embed.description += "**Tiếp theo:**\n"
-                for i, song in enumerate(next_songs):
-                    info = get_video_info(song['url'])
+                infos = []
+                uncached_indices = []
+                for idx, song in enumerate(next_songs):
+                    info = VIDEO_CACHE.get(song['url'], (None, None))[1]
+                    if info:
+                        infos.append(info)
+                    else:
+                        infos.append(None)
+                        uncached_indices.append(idx)
+                # Nếu có bài chưa cache, lấy info async (không block toàn bộ)
+                if uncached_indices:
+                    loop = asyncio.get_event_loop()
+                    uncached_infos = await asyncio.gather(*[
+                        loop.run_in_executor(None, functools.partial(get_video_info, next_songs[i]['url']))
+                        for i in uncached_indices
+                    ])
+                    for idx, info in zip(uncached_indices, uncached_infos):
+                        infos[idx] = info
+                for i, (song, info) in enumerate(zip(next_songs, infos)):
                     title = info['title']
                     url = info.get('url', song['url'])
                     embed.description += f"  **#{i + 1}:** [{title}]({url})\n"
+                if len(queue) > 11:
+                    embed.description += f"\n...và {len(queue)-11} bài nữa."
 
-            # Tính tổng thời lượng hàng chờ
-            total_duration = 0
-            for song in queue:
-                info = get_video_info(song['url'])
-                total_duration += info.get('duration', 0)
-            formatted_duration = str(datetime.timedelta(seconds=total_duration))
-
-            embed.set_footer(
-                text=f"📊 Tổng số bài trong hàng chờ: {len(queue)}  | ⏳ Thời lượng ước tính: {formatted_duration}"
-            )
+            # Tổng thời lượng chỉ lấy tối đa 20 bài (ưu tiên cache)
+            infos_all = []
+            uncached_indices = []
+            for idx, song in enumerate(queue[:20]):
+                info = VIDEO_CACHE.get(song['url'], (None, None))[1]
+                if info:
+                    infos_all.append(info)
+                else:
+                    infos_all.append(None)
+                    uncached_indices.append(idx)
+            if uncached_indices:
+                loop = asyncio.get_event_loop()
+                uncached_infos = await asyncio.gather(*[
+                    loop.run_in_executor(None, functools.partial(get_video_info, queue[i]['url']))
+                    for i in uncached_indices
+                ])
+                for idx, info in zip(uncached_indices, uncached_infos):
+                    infos_all[idx] = info
+            total_duration = sum(info.get('duration', 0) for info in infos_all if info)
+            if len(queue) > 20:
+                embed.set_footer(
+                    text=f"📊 Tổng số bài trong hàng chờ: {len(queue)}\n⏳ Thời lượng ước tính: >{str(datetime.timedelta(seconds=total_duration))} (chỉ tính 20 bài đầu)"
+                )
+            else:
+                formatted_duration = str(datetime.timedelta(seconds=total_duration))
+                embed.set_footer(
+                    text=f"📊 Tổng số bài trong hàng chờ: {len(queue)}\n⏳ Thời lượng ước tính: {formatted_duration}"
+                )
         except Exception as e:
             print(f"Lỗi cập nhật embed: {e}")
             embed.description = "Lỗi hiển thị hàng chờ"
@@ -680,6 +750,16 @@ async def update_queue_message(ctx):
         save_queue_message_id(queue_message_id)
     else:
         await queue_message.edit(embed=embed, view=QueueControlView(channel))
+
+# Helper: pre-cache video info for a list of songs (run in executor)
+def precache_video_infos(songs):
+    for song in songs:
+        url = song['url']
+        if url not in VIDEO_CACHE or (time.time() - VIDEO_CACHE[url][0] > CACHE_DURATION):
+            try:
+                get_video_info(url)
+            except Exception:
+                pass
 
 async def clear_queue_message(ctx):
     """Cập nhật tin nhắn hàng chờ thành trống"""
@@ -779,12 +859,6 @@ def create_tray_icon():
 
 @bot.event
 async def on_ready():
-    ctypes.windll.user32.MessageBoxW(
-        0,
-        f"Bot đã khởi động với tên: {bot.user}",
-        str(bot.user),  # Đặt tiêu đề hộp thoại là tên bot
-        0x40
-    )
     print(f"Bot đã sẵn sàng! Đăng nhập với tên: {bot.user}")
     threading.Thread(target=create_tray_icon, daemon=True).start()
     active_channel_id = load_active_channel_id()
@@ -804,36 +878,46 @@ async def on_ready():
                 except discord.NotFound:
                     queue_message = None
 
-            # Tạo embed mới
             embed_title = "🎵 Hàng chờ phát nhạc"
             embed = discord.Embed(title=embed_title, color=discord.Color.blurple())
             if not queue:
                 embed.description = "Hàng chờ trống."
             else:
                 try:
-                    # Hiển thị bài đang phát là link
-                    current_song_info = get_video_info(queue[0]['url'])
+                    # Lấy thông tin bài hát hiện tại (KHÔNG blocking, chỉ lấy từ cache nếu có)
+                    current_song_info = VIDEO_CACHE.get(queue[0]['url'], (None, None))[1]
+                    if not current_song_info:
+                        current_song_info = {
+                            "title": queue[0].get("title", "Unknown Title"),
+                            "url": queue[0].get("url"),
+                            "duration": 0,
+                            "thumbnail": None
+                        }
                     current_title = current_song_info['title']
                     current_url = current_song_info.get('url', queue[0]['url'])
                     embed.description = f"**Đang phát: [{current_title}]({current_url})**\n\n"
-                    # Thêm thumbnail nếu có
                     if current_song_info.get("thumbnail"):
                         embed.set_thumbnail(url=current_song_info["thumbnail"])
-                    # Danh sách tiếp theo
                     next_songs = queue[1:11]
                     if next_songs:
                         embed.description += "**Tiếp theo:**\n"
                         for i, song in enumerate(next_songs):
-                            info = get_video_info(song['url'])
+                            info = VIDEO_CACHE.get(song['url'], (None, None))[1]
+                            if not info:
+                                info = {
+                                    "title": song.get("title", "Unknown Title"),
+                                    "url": song.get("url")
+                                }
                             title = info['title']
                             url = info.get('url', song['url'])
                             embed.description += f"  **#{i + 1}:** [{title}]({url})\n"
-                    # Tổng thời lượng
+                    # Tổng thời lượng (chỉ lấy từ cache, nếu không có thì bỏ qua)
                     total_duration = 0
                     for song in queue:
-                        info = get_video_info(song['url'])
-                        total_duration += info.get('duration', 0)
-                    formatted_duration = str(datetime.timedelta(seconds=total_duration))
+                        info = VIDEO_CACHE.get(song['url'], (None, None))[1]
+                        if info:
+                            total_duration += info.get('duration', 0)
+                    formatted_duration = str(datetime.timedelta(seconds=total_duration)) if total_duration else "Không xác định"
                     embed.set_footer(
                         text=f"📊 Tổng số bài trong hàng chờ: {len(queue)}  | ⏳ Thời lượng ước tính: {formatted_duration}"
                     )
@@ -846,10 +930,16 @@ async def on_ready():
             else:
                 await queue_message.edit(embed=embed, view=QueueControlView(text_channel))
 
+    ctypes.windll.user32.MessageBoxW(
+        0,
+        f"Bot đã khởi động với tên: {bot.user}",
+        str(bot.user),
+        0x40
+    )
+
     # Tự động phát tiếp nếu có queue đã lưu
     if queue and not is_playing:
         await play_next(text_channel)
-        
 
 import asyncio
 import datetime
@@ -862,7 +952,7 @@ async def search_youtube_song(query: str):
     ydl_opts = {
         "quiet": True,
         "no_warnings": True,
-        "extract_flat": True, 
+        "extract_flat": True,  # Chỉ lấy thông tin cơ bản, không lấy duration
         "default_search": "ytsearch",
         "format": "bestaudio"
     }
@@ -874,14 +964,13 @@ async def search_youtube_song(query: str):
                 info = await asyncio.get_event_loop().run_in_executor(
                     None, lambda: ydl.extract_info(query, download=False))
                 if info and 'entries' in info:
-                    # Return all videos in playlist
+                    # Chỉ lấy title và url, KHÔNG lấy duration ở đây
                     videos = []
                     for entry in info['entries']:
                         if entry:
                             videos.append({
                                 'title': entry.get('title', 'Unknown Title'),
-                                'url': entry.get('webpage_url', entry.get('url', '')),
-                                'duration': entry.get('duration', 0)
+                                'url': entry.get('url') or entry.get('webpage_url', '')
                             })
                     return {'type': 'playlist', 'videos': videos}
 
@@ -933,6 +1022,34 @@ def is_active_channel(ctx):
     active_channel_id = load_active_channel_id()
     return active_channel_id is None or ctx.channel.id == active_channel_id
 
+async def search_youtube_playlist_entries(playlist_url):
+    """Trả về từng entry của playlist ngay khi tìm thấy (generator)"""
+    ydl_opts = {
+        "quiet": True,
+        "no_warnings": True,
+        "extract_flat": True,
+        "skip_download": True,
+        "extract_flat": "in_playlist",
+        "prefer_insecure": True,
+        "geo_bypass": True,
+        "nocheckcertificate": True,
+        "ignoreerrors": True
+    }
+    try:
+        with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+            info = await asyncio.get_event_loop().run_in_executor(
+                None, lambda: ydl.extract_info(playlist_url, download=False)
+            )
+            if info and 'entries' in info:
+                for entry in info['entries']:
+                    if entry:
+                        yield {
+                            'title': entry.get('title', 'Unknown Title'),
+                            'url': entry.get('url') or entry.get('webpage_url', '')
+                        }
+    except Exception as e:
+        print(f"Lỗi lấy playlist: {e}")
+
 @bot.command(name="activate")
 async def activate(ctx):
     """Đặt kênh hiện tại thành kênh mặc định của bot"""
@@ -975,7 +1092,6 @@ async def play(ctx, *, query: str = None):
         color=discord.Color.blue()
     ))
 
-    # Tìm kiếm video/playlist
     result = await search_youtube_song(query)
     
     if not result:
@@ -989,14 +1105,27 @@ async def play(ctx, *, query: str = None):
         await status_message.delete()
         return
 
+    started_playing = False
+
     if result['type'] == 'playlist':
-        videos = result['videos']
-        queue.extend({"title": video['title'], "url": video['url']} for video in videos)
+        playlist_url = query
+        added_count = 0
+        async for video in search_youtube_playlist_entries(playlist_url):
+            queue.append({"title": video['title'], "url": video['url']})
+            asyncio.get_event_loop().run_in_executor(None, precache_video_infos, [{"title": video['title'], "url": video['url']}])
+            added_count += 1
+            # Phát nhạc ngay khi có bài đầu tiên
+            if not is_playing and not started_playing:
+                started_playing = True
+                await update_queue_message(ctx)
+                await play_next(ctx)
+            # Cập nhật embed mỗi 10 bài
+            if added_count % 10 == 0:
+                await update_queue_message(ctx)
+        await update_queue_message(ctx)
         success_embed = discord.Embed(
             title="✅ Đã thêm playlist!",
-            description="\n".join(
-                f"**[{video['title']}]({video['url']})**" for video in videos[:10]
-            ) + (f"\n...và {len(videos)-10} bài nữa" if len(videos) > 10 else ""),
+            description=f"Đã thêm {added_count} bài từ playlist. Có thể mất một chút thời gian để tải tất cả.",
             color=discord.Color.green()
         )
     else:
@@ -1005,18 +1134,19 @@ async def play(ctx, *, query: str = None):
             "title": video['title'],
             "url": video['url']
         })
+        asyncio.get_event_loop().run_in_executor(None, precache_video_infos, [{"title": video['title'], "url": video['url']}])
         success_embed = discord.Embed(
             title="✅ Đã thêm vào hàng chờ!",
             description=f"**[{video['title']}]({video['url']})**",
             color=discord.Color.green()
         )
+        if not is_playing:
+            await update_queue_message(ctx)
+            await play_next(ctx)
 
     success_embed.set_footer(text=f"Yêu cầu bởi: {ctx.author} | {request_time}")
     await status_message.edit(embed=success_embed)
     await update_queue_message(ctx)
-
-    if not is_playing:
-        await play_next(ctx)
 
     await asyncio.sleep(5)
     await status_message.delete()
