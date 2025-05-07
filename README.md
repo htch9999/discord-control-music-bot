@@ -20,6 +20,20 @@ Search, queue, skip, pause, adjust volume, and more—all from your Discord serv
 
 ### 🚀 Installation
 
+**Install FFmpeg:**  
+- Download: https://ffmpeg.org/download.html  
+- Extract and add the `bin` folder to your system `PATH`.
+
+**Create Discord Bot & Token:**  
+- Go to [Discord Developer Portal](https://discord.com/developers/)
+- Create new application > Bot > Reset Token > Save token to `token.json`:
+  ```json
+  { "BOT_TOKEN": "YOUR_BOT_TOKEN_HERE" }
+  ```
+- Enable "Message Content Intent" in Bot settings.
+- Use OAuth2 URL Generator to invite bot to your server with permissions:
+  - Read Messages, Send Messages, Manage Messages
+
 **Download:**  
 - 👉 [Download the latest release (source code included)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
 
@@ -38,20 +52,6 @@ Search, queue, skip, pause, adjust volume, and more—all from your Discord serv
   ```sh
   python main.py
   ```
-
-**Install FFmpeg:**  
-- Download: https://ffmpeg.org/download.html  
-- Extract and add the `bin` folder to your system `PATH`.
-
-**Create Discord Bot & Token:**  
-- Go to [Discord Developer Portal](https://discord.com/developers/)
-- Create new application > Bot > Reset Token > Save token to `token.json`:
-  ```json
-  { "BOT_TOKEN": "YOUR_BOT_TOKEN_HERE" }
-  ```
-- Enable "Message Content Intent" in Bot settings.
-- Use OAuth2 URL Generator to invite bot to your server with permissions:
-  - Read Messages, Send Messages, Manage Messages
 
 ---
 
@@ -144,25 +144,6 @@ Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... 
 
 ### 🚀 Hướng dẫn cài đặt
 
-**Tải về:**  
-- 👉 [Tải bản phát hành mới nhất (đã có kèm cả mã nguồn)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
-
-**Hoặc tự build file .exe:**  
-- Cài Python 3.11.9 và các thư viện:
-  ```sh
-  pip install discord.py yt-dlp py-cord pycaw pystray pillow psutil comtypes pyinstaller
-  ```
-- Build bot thành file .exe (khuyên dùng để chạy nền, không hiện cửa sổ):
-  ```sh
-  python -m PyInstaller --onefile --noconsole --icon=icon.png --add-data "icon.png;." main.py
-  ```
-- Sử dụng file `main.exe` để chạy bot (không hiện console, có icon khay hệ thống).
-
-**Hoặc chạy trực tiếp bằng Python:**  
-  ```sh
-  python main.py
-  ```
-
 **Cài FFmpeg:**  
 - Tải tại: https://ffmpeg.org/download.html  
 - Giải nén và thêm thư mục `bin` vào biến môi trường `PATH`.
@@ -176,6 +157,25 @@ Tìm kiếm, thêm hàng chờ, bỏ qua, tạm dừng, chỉnh âm lượng... 
 - Bật "Message Content Intent" trong cài đặt Bot.
 - Dùng OAuth2 URL Generator để mời bot vào server với quyền:
   - Read Messages, Send Messages, Manage Messages
+    
+**Tải về:**  
+- 👉 [Tải bản phát hành mới nhất (đã có kèm cả mã nguồn)](https://github.com/htch9999/discord-control-music-bot/releases/latest)  
+
+**Hoặc tự build file .exe:**  
+- Cài Python 3.11.9 và các thư viện:
+  ```sh
+  pip install discord.py yt-dlp py-cord pycaw pystray pillow psutil comtypes pyinstaller
+  ```
+- Build bot thành file .exe (khuyên dùng để chạy nền, không hiện cửa sổ):
+  ```sh
+  python -m PyInstaller --onefile --noconsole --icon=icon.png --add-data "icon.png;." main.py
+  ```
+- Sử dụng file `main.exe` để chạy bot (không hiện console, có icon chức năng ở khay hệ thống).
+
+**Hoặc chạy trực tiếp bằng Python:**  
+  ```sh
+  python main.py
+  ```
 
 ---
 
